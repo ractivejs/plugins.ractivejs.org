@@ -1,0 +1,10 @@
+{
+	"url": "https://github.com/ractivejs/ractive-events-tap",
+	"description": "Tap/fastclick plugin",
+	"npm": "ractive-events-tap",
+	"bower": "ractive-events-tap",
+	"download": {
+		"dev": "https://rawgit.com/ractivejs/ractive-events-tap/master/dist/ractive-events-tap.js"
+	},
+	"demo": ""
+}

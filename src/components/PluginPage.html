@@ -1,0 +1,73 @@
+<link rel='ractive' href='./Layout.html'>
+
+<Layout>
+	<header>
+		<h1>{{name}}</h1>
+
+		{{#if meta.npm}}
+			<p>Install: <code>npm install {{meta.npm}}</code></p>
+		{{/if}}
+
+		{{#if meta.bower}}
+			<p>Install: <code>bower install {{meta.bower}}</code></p>
+		{{/if}}
+
+		{{#if meta.download && meta.download.dev || meta.download.min}}
+			{{#if meta.download.dev}}
+				<p>Download (development): <a href='{{meta.download.dev}}'>{{getName(meta.download.dev)}}</a></p>
+			{{/if}}
+
+			{{#if meta.download.min}}
+				<p>Download (minified): <a href='{{meta.download.min}}'>{{getName(meta.download.min)}}</a></p>
+			{{/if}}
+		{{/if}}
+	</header>
+
+	<main>
+		{{{marked(README)}}}
+	</main>
+</Layout>
+
+<script>
+	const marked = require( 'marked' );
+	const highlight = require( 'highlight.js' );
+
+	function escape ( code ) {
+		return code
+			.replace(/&/g, '&amp;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#39;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
+	}
+
+	marked.setOptions({
+		gfm: true,
+		highlight: function ( code, lang ) {
+			if ( lang ) {
+				return escape( highlight.highlight( lang, code, true ).value );
+			}
+
+			return escape( highlight.highlightAuto( code ).value );
+		}
+	});
+
+	component.exports = {
+		data: {
+			html: function ( markdown ) {
+				// need to find code blocks and escape them
+				markdown = markdown
+					.replace( /```(\w*)\n(.+)\n```/g, function ( match, lang, content ) {
+						return '<pre><code data-lang="' + lang + '">' + escape( content ) + '</code></pre>';
+					});
+
+				return marked( markdown );
+			},
+			marked: marked,
+			getName: function ( url ) {
+				console.log( 'url', url );
+				return url.substring( url.lastIndexOf( '/' ) + 1 );
+			}
+		}
+	};
+</script>
