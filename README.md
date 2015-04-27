@@ -1,0 +1,3 @@
+# plugins.ractivejs.org
+
+This will eventually become a central repository for Ractive plugins. Much work still to do...
